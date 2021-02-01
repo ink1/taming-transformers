@@ -126,11 +126,7 @@ if __name__ == "__main__":
     model = COCOStuffSegmenter({}).cuda()
     print("Instantiated model.")
 
-    dataset = Examples(
-        data_csv="data/pic_examples.txt",
-        data_root="data/pic_images",
-        segmentation_root="data/pic_segmentations")
-    #   size=size, random_crop=random_crop, interpolation=interpolation)
+    dataset = Examples()
     dloader = DataLoader(dataset, batch_size=batchsize)
     iterate_dataset(dataloader=dloader, destpath=dest, model=model)
     print("done.")
