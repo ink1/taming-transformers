@@ -13,7 +13,7 @@ import torch.nn.functional as F
 # download deeplabv2_resnet101_msc-cocostuff164k-100000.pth from
 # https://github.com/kazuto1011/deeplab-pytorch/releases/download/v1.0/deeplabv2_resnet101_msc-cocostuff164k-100000.pth
 # and put the path here
-CKPT_PATH = "TODO"
+CKPT_PATH = "deeplabv2_resnet101_msc-cocostuff164k-100000.pth"
 
 rescale = lambda x: (x + 1.) / 2.
 
@@ -43,7 +43,9 @@ class COCOStuffSegmenter(nn.Module):
         x = self._pre_process(x)
         x = self.model(x)
         if upsample is not None:
-            x = torch.nn.functional.upsample_bilinear(x, size=upsample)
+            # x = torch.nn.functional.upsample_bilinear(x, size=upsample)
+            x = torch.nn.functional.interpolate(x, size=upsample, mode='bilinear')
+            # 'nearest' | 'linear' | 'bilinear' | 'bicubic' | 'trilinear' | 'area'. Default: 'nearest'
         return x
 
     def _pre_process(self, x):
@@ -124,7 +126,11 @@ if __name__ == "__main__":
     model = COCOStuffSegmenter({}).cuda()
     print("Instantiated model.")
 
-    dataset = Examples()
+    dataset = Examples(
+        data_csv="data/pic_examples.txt",
+        data_root="data/pic_images",
+        segmentation_root="data/pic_segmentations")
+    #   size=size, random_crop=random_crop, interpolation=interpolation)
     dloader = DataLoader(dataset, batch_size=batchsize)
     iterate_dataset(dataloader=dloader, destpath=dest, model=model)
     print("done.")
