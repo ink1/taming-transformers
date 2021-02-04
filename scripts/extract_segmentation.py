@@ -13,7 +13,7 @@ import torch.nn.functional as F
 # download deeplabv2_resnet101_msc-cocostuff164k-100000.pth from
 # https://github.com/kazuto1011/deeplab-pytorch/releases/download/v1.0/deeplabv2_resnet101_msc-cocostuff164k-100000.pth
 # and put the path here
-CKPT_PATH = "TODO"
+CKPT_PATH = "deeplabv2_resnet101_msc-cocostuff164k-100000.pth"
 
 rescale = lambda x: (x + 1.) / 2.
 

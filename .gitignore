@@ -1,0 +1,4 @@
+*__pycache__*
+logs/*
+taming_transformers.egg-info
+deeplabv2_resnet101_msc-cocostuff164k-100000.pth

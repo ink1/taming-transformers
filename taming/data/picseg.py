@@ -58,10 +58,14 @@ class SegmentationBase(Dataset):
         image = np.array(image).astype(np.uint8)
         if self.size is not None:
             image = self.image_rescaler(image=image)["image"]
-        segmentation = Image.open(example["segmentation_path_"])
-        segmentation = np.array(segmentation).astype(np.uint8)
-        if self.size is not None:
-            segmentation = self.segmentation_rescaler(image=segmentation)["image"]
+        # hack: we are creating segmentation and don't have a file to read.
+        # so instead we initialize segmentation array with zeros
+        #segmentation = Image.open(example["segmentation_path_"])
+        #segmentation = np.array(segmentation).astype(np.uint8)
+        #if self.size is not None:
+        #    segmentation = self.segmentation_rescaler(image=segmentation)["image"]
+        segmentation = np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
+        
         if self.size is not None:
             processed = self.preprocessor(image=image,
                                           mask=segmentation
@@ -77,16 +81,9 @@ class SegmentationBase(Dataset):
         return example
 
 
-class picTrain(SegmentationBase):
+class Examples(SegmentationBase):
     def __init__(self, size=None, random_crop=False, interpolation="bicubic"):
-        super().__init__(data_csv="data/pic_train_images.txt",
-                         data_root="data/pic_train_images",
-                         segmentation_root="data/pic_train_segmentations",
-                         size=size, random_crop=random_crop, interpolation=interpolation)
-
-class picValid(SegmentationBase):
-    def __init__(self, size=None, random_crop=False, interpolation="bicubic"):
-        super().__init__(data_csv="data/pic_valid_images.txt",
-                         data_root="data/pic_valid_images",
-                         segmentation_root="data/pic_valid_segmentations",
+        super().__init__(data_csv="data/pic_examples.txt",
+                         data_root="data/pic_images",
+                         segmentation_root="data/pic_segmentations",
                          size=size, random_crop=random_crop, interpolation=interpolation)
