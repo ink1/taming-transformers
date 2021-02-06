@@ -60,6 +60,7 @@ class SegmentationBase(Dataset):
             image = self.image_rescaler(image=image)["image"]
         segmentation = Image.open(example["segmentation_path_"])
         segmentation = np.array(segmentation).astype(np.uint8)
+        segmentation = segmentation.clip(0, 181)
         if self.size is not None:
             segmentation = self.segmentation_rescaler(image=segmentation)["image"]
         if self.size is not None:
